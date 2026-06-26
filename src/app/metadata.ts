@@ -1,10 +1,14 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 const siteConfig = {
   title: "АРМАДА — Асоціація виробників безпілотних систем",
   description: "Об’єднання українських компаній, що створюють провідні безпілотні системи та рішення для мілітарної, аграрної та інших індустрій.",
   url: "https://www.armada.net.ua",
   ogImage: "https://www.armada.net.ua/og-image.png",
+};
+
+export const viewport: Viewport = {
+  themeColor: "#eab308",
 };
 
 export const metadata: Metadata = {
@@ -50,6 +54,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",

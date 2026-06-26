@@ -27,6 +27,7 @@ import {
 import { translations, Locale } from "@/lib/i18n/translations";
 import { useLocale } from "@/components/Providers";
 import { ContactForm } from "@/components/ContactForm";
+import Link from "next/link";
 
 // --- Components ---
 
@@ -80,9 +81,11 @@ const Navbar = () => {
                 >
                   {locale === "uk" ? "EN" : "UA"}
                 </button>
-                <button className="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-2 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95">
-                  {t.join}
-                </button>
+                <Link href="/join">
+                  <button className="bg-yellow-500 hover:bg-yellow-600 text-black px-5 py-2 rounded-full text-sm font-bold transition-all transform hover:scale-105 active:scale-95">
+                    {t.join}
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -125,9 +128,11 @@ const Navbar = () => {
                 </a>
               ))}
               <div className="mt-4 px-3">
-                <button className="w-full bg-yellow-500 text-black px-5 py-3 rounded-xl text-lg font-bold">
-                  {t.join}
-                </button>
+                <Link href="/join">
+                  <button className="w-full bg-yellow-500 text-black px-5 py-3 rounded-xl text-lg font-bold">
+                    {t.join}
+                  </button>
+                </Link>
               </div>
             </div>
           </motion.div>
@@ -167,9 +172,11 @@ const Hero = ({ locale }: { locale: Locale }) => {
             {t.description}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="w-full sm:w-auto bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 rounded-full font-black text-lg transition-all shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:shadow-[0_0_30px_rgba(234,179,8,0.5)]">
-              {t.ctaPrimary}
-            </button>
+            <Link href="/join" className="w-full sm:w-auto">
+              <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 rounded-full font-black text-lg transition-all shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:shadow-[0_0_30px_rgba(234,179,8,0.5)]">
+                {t.ctaPrimary}
+              </button>
+            </Link>
             <button className="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white border border-white/10 px-8 py-4 rounded-full font-bold text-lg transition-all backdrop-blur-sm">
               {t.ctaSecondary}
             </button>
@@ -450,6 +457,32 @@ const Contacts = ({ locale }: { locale: Locale }) => (
     </section>
 );
 
+const Marquee = () => {
+  const members = [
+    "DeViro", "Tech Force", "3D Tech", "Banderol", "The Phoenix Group",
+    "SMTCS Lab", "Blackbird FPV", "Sky Tactics", "Buntar", "Sky Riper",
+    "Drone Security", "Viyriy"
+  ];
+
+  return (
+    <div className="py-20 bg-[#050505] overflow-hidden border-y border-white/5">
+      <div className="flex whitespace-nowrap">
+        <motion.div
+          animate={{ x: [0, -1000] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="flex gap-16 items-center pr-16"
+        >
+          {members.concat(members).map((member, idx) => (
+            <span key={idx} className="text-4xl md:text-6xl font-black text-white/10 hover:text-yellow-500/50 transition-colors cursor-default uppercase tracking-tighter">
+              {member}
+            </span>
+          ))}
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
 const Footer = ({ locale }: { locale: Locale }) => (
     <footer className="py-12 bg-[#050505] text-gray-500 border-t border-white/5">
         <div className="container mx-auto px-4 text-center">
@@ -492,6 +525,7 @@ export default function Home() {
       <About locale={locale} />
       <Activities locale={locale} />
       <News locale={locale} />
+      <Marquee />
       <Contacts locale={locale} />
       <Footer locale={locale} />
 
