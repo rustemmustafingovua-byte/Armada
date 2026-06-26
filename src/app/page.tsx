@@ -28,6 +28,7 @@ import { translations, Locale } from "@/lib/i18n/translations";
 import { useLocale } from "@/components/Providers";
 import { ContactForm } from "@/components/ContactForm";
 import Link from "next/link";
+import { MagneticButton } from "@/components/MagneticButton";
 
 // --- Components ---
 
@@ -174,15 +175,19 @@ const Hero = ({ locale }: { locale: Locale }) => {
           <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
             {t.description}
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/join" className="w-full sm:w-auto">
-              <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 rounded-full font-black text-lg transition-all shadow-[0_0_20px_rgba(234,179,8,0.3)] hover:shadow-[0_0_30px_rgba(234,179,8,0.5)]">
-                {t.ctaPrimary}
-              </button>
-            </Link>
-            <button className="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white border border-white/10 px-8 py-4 rounded-full font-bold text-lg transition-all backdrop-blur-sm">
-              {t.ctaSecondary}
-            </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <MagneticButton>
+                <Link href="/join" className="w-full sm:w-auto">
+                <button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black px-10 py-5 rounded-full font-black text-xl transition-all shadow-[0_0_30px_rgba(234,179,8,0.3)] hover:shadow-[0_0_50px_rgba(234,179,8,0.5)]">
+                    {t.ctaPrimary}
+                </button>
+                </Link>
+            </MagneticButton>
+            <MagneticButton>
+                <button className="w-full sm:w-auto bg-white/5 hover:bg-white/10 text-white border border-white/10 px-10 py-5 rounded-full font-bold text-xl transition-all backdrop-blur-sm">
+                {t.ctaSecondary}
+                </button>
+            </MagneticButton>
           </div>
         </motion.div>
       </div>

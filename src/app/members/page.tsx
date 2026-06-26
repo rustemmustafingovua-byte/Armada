@@ -2,11 +2,11 @@
 
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ExternalLink, ShieldCheck, Zap, Search, Filter } from "lucide-react";
+import { ArrowLeft, ExternalLink, ShieldCheck, Zap, Search } from "lucide-react";
 import Link from "next/link";
 import { useLocale } from "@/components/Providers";
 
-const MemberCard = ({ name, type, delay }: { name: string, type: string, delay: number }) => (
+const MemberCard = ({ name, type, delay, slug }: { name: string, type: string, delay: number, slug: string }) => (
   <motion.div
     layout
     initial={{ opacity: 0, scale: 0.95 }}
@@ -15,21 +15,23 @@ const MemberCard = ({ name, type, delay }: { name: string, type: string, delay: 
     transition={{ duration: 0.4, delay }}
     className="bg-white/5 border border-white/10 p-8 rounded-3xl hover:border-yellow-500/50 transition-all group flex flex-col justify-between h-full"
   >
-    <div>
-        <div className="flex justify-between items-start mb-6">
-            <div className="w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
-                <ShieldCheck className="text-yellow-500" size={24} />
+    <Link href={`/members/${slug}`} className="flex flex-col justify-between h-full">
+        <div>
+            <div className="flex justify-between items-start mb-6">
+                <div className="w-12 h-12 bg-yellow-500/10 rounded-xl flex items-center justify-center">
+                    <ShieldCheck className="text-yellow-500" size={24} />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-yellow-500/50 bg-yellow-500/5 px-2 py-1 rounded">
+                    Verified Member
+                </span>
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-yellow-500/50 bg-yellow-500/5 px-2 py-1 rounded">
-                Verified Member
-            </span>
+            <h3 className="text-xl font-bold text-white mb-2 group-hover:text-yellow-500 transition-colors">{name}</h3>
+            <p className="text-gray-500 text-sm font-light uppercase tracking-tighter">{type}</p>
         </div>
-        <h3 className="text-xl font-bold text-white mb-2 group-hover:text-yellow-500 transition-colors">{name}</h3>
-        <p className="text-gray-500 text-sm font-light uppercase tracking-tighter">{type}</p>
-    </div>
-    <button className="mt-8 flex items-center gap-2 text-white/30 group-hover:text-white transition-colors text-xs font-bold">
-        VIEW PROFILE <ExternalLink size={12} />
-    </button>
+        <div className="mt-8 flex items-center gap-2 text-white/30 group-hover:text-white transition-colors text-xs font-bold">
+            VIEW PROFILE <ExternalLink size={12} />
+        </div>
+    </Link>
   </motion.div>
 );
 
@@ -38,20 +40,20 @@ export default function MembersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const members = [
-    { name: "DeViro", type: "Unmanned Systems" },
-    { name: "Tech Force Ukraine", type: "Defense Solutions" },
-    { name: "3D Tech", type: "Innovative Manufacturing" },
-    { name: "Banderol", type: "FPV Solutions" },
-    { name: "The Phoenix Group", type: "Defense Tech" },
-    { name: "SMTCS Lab", type: "Engineering & Design" },
-    { name: "Blackbird FPV", type: "Combat Drones" },
-    { name: "Sky Tactics", type: "Tactical Systems" },
-    { name: "Buntar", type: "Defense Software" },
-    { name: "Sky Riper", type: "High-speed UAVs" },
-    { name: "Drone Security", type: "Counter-UAS" },
-    { name: "Viyriy", type: "Long-range Systems" }
-  ];
+  const members = useMemo(() => [
+    { name: "DeViro", type: "Unmanned Systems", slug: "deviro" },
+    { name: "Tech Force Ukraine", type: "Defense Solutions", slug: "tech-force" },
+    { name: "3D Tech", type: "Innovative Manufacturing", slug: "3d-tech" },
+    { name: "Banderol", type: "FPV Solutions", slug: "banderol" },
+    { name: "The Phoenix Group", type: "Defense Tech", slug: "phoenix-group" },
+    { name: "SMTCS Lab", type: "Engineering & Design", slug: "smtcs-lab" },
+    { name: "Blackbird FPV", type: "Combat Drones", slug: "blackbird-fpv" },
+    { name: "Sky Tactics", type: "Tactical Systems", slug: "sky-tactics" },
+    { name: "Buntar", type: "Defense Software", slug: "buntar" },
+    { name: "Sky Riper", type: "High-speed UAVs", slug: "sky-riper" },
+    { name: "Drone Security", type: "Counter-UAS", slug: "drone-security" },
+    { name: "Viyriy", type: "Long-range Systems", slug: "viyriy" }
+  ], []);
 
   const filters = ["All", "Unmanned Systems", "Defense Solutions", "FPV Solutions", "Tactical Systems", "Defense Software"];
 

@@ -3,6 +3,7 @@ import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { metadata as siteMetadata, viewport as siteViewport } from "./metadata";
 import { JsonLd } from "@/components/JsonLd";
+import { SplashScreen } from "@/components/SplashScreen";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,6 +29,7 @@ export default function RootLayout({
     >
       <body className="bg-background text-foreground antialiased selection:bg-yellow-500/30">
         <Providers>
+          <SplashScreen />
           <JsonLd />
           {children}
         </Providers>
