@@ -6,7 +6,7 @@ import { ArrowLeft, Calendar, Tag, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useLocale } from "@/components/Providers";
 
-const NewsItem = ({ title, excerpt, date, tag, delay, locale }: { title: string, excerpt: string, date: string, tag: string, delay: number, locale: string }) => (
+const NewsItem = ({ title, excerpt, date, tag, delay, locale, slug }: { title: string, excerpt: string, date: string, tag: string, delay: number, locale: string, slug: string }) => (
     <motion.div
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -22,15 +22,19 @@ const NewsItem = ({ title, excerpt, date, tag, delay, locale }: { title: string,
                 <span className="flex items-center gap-1"><Calendar size={14} /> {date}</span>
                 <span className="flex items-center gap-1 text-yellow-500"><Tag size={14} /> {tag}</span>
             </div>
-            <h3 className="text-2xl md:text-3xl font-black text-white mb-4 group-hover:text-yellow-500 transition-colors">
-                {title}
-            </h3>
+            <Link href={`/news/${slug}`}>
+                <h3 className="text-2xl md:text-3xl font-black text-white mb-4 group-hover:text-yellow-500 transition-colors">
+                    {title}
+                </h3>
+            </Link>
             <p className="text-gray-400 font-light text-lg mb-6 leading-relaxed">
                 {excerpt}
             </p>
-            <button className="flex items-center gap-2 text-white font-bold hover:gap-3 transition-all">
-                {locale === "uk" ? "Читати далі" : "Read More"} <ArrowRight size={20} className="text-yellow-500" />
-            </button>
+            <Link href={`/news/${slug}`}>
+                <button className="flex items-center gap-2 text-white font-bold hover:gap-3 transition-all">
+                    {locale === "uk" ? "Читати далі" : "Read More"} <ArrowRight size={20} className="text-yellow-500" />
+                </button>
+            </Link>
         </div>
     </motion.div>
 );
@@ -40,24 +44,28 @@ export default function NewsPage() {
 
   const ukNews = [
     {
+        slug: "critically-protected-kyiv",
         title: "Презентація проєкту «КРИТИЧНО ЗАХИЩЕНО» у Києві",
         excerpt: "3 червня у Києві Асоціація виробників безпілотних систем та супутніх технологій «АРМАДА» провела презентацію проєкту «КРИТИЧНО ЗАХИЩЕНО». Він присвячений створенню практичних механізмів захисту об’єктів критичної інфраструктури від повітряних загроз.",
         date: "03 Червня, 2026",
         tag: "Проєкти"
     },
     {
+        slug: "security-2-forum",
         title: "Україна формує нову архітектуру захисту критичної інфраструктури",
         excerpt: "У Києві відбувся форум Security 2.0, присвячений захисту критичної інфраструктури. Заключна панель “Критично захищено: критичний діалог”, організована у партнерстві із Асоціацією “Армада”.",
         date: "28 Травня, 2026",
         tag: "Форуми"
     },
     {
+        slug: "global-drone-academy-partnership",
         title: "Асоціація АРМАДА та Global Drone Academy стали партнерами",
         excerpt: "Домовленість передбачає спільне напрацювання методики та прийомів навчання на ті чи інші безпілотні системи та побудову моделі взаємодії між виробниками та навчальним центром.",
         date: "15 Травня, 2026",
         tag: "Партнерство"
     },
     {
+        slug: "armada-offer-manufacturers",
         title: "Що АРМАДА пропонує виробникам безпілотних систем?",
         excerpt: "Якщо ви виробник /розробник продуктів чи супровідних рішень, пов’язаних із застосуванням безпілотних систем, АРМАДА допоможе залучити потрібних фахівців.",
         date: "10 Травня, 2026",
@@ -67,24 +75,28 @@ export default function NewsPage() {
 
   const enNews = [
     {
+        slug: "critically-protected-kyiv",
         title: "'CRITICALLY PROTECTED' project presentation in Kyiv",
         excerpt: "On June 3, the ARMADA Association held a presentation of the 'CRITICALLY PROTECTED' project in Kyiv. It is dedicated to creating practical protection mechanisms.",
         date: "June 03, 2026",
         tag: "Projects"
     },
     {
+        slug: "security-2-forum",
         title: "Ukraine forms a new architecture for critical infrastructure protection",
         excerpt: "The Security 2.0 forum was held in Kyiv, dedicated to the protection of critical infrastructure.",
         date: "May 28, 2026",
         tag: "Forums"
     },
     {
+        slug: "global-drone-academy-partnership",
         title: "ARMADA Association and Global Drone Academy become partners",
         excerpt: "The agreement provides for the joint development of training methods for various unmanned systems.",
         date: "May 15, 2026",
         tag: "Partnership"
     },
     {
+        slug: "armada-offer-manufacturers",
         title: "What does ARMADA offer to manufacturers of unmanned systems?",
         excerpt: "If you are a manufacturer or developer of products related to the use of unmanned systems, ARMADA will help involve specialists.",
         date: "May 10, 2026",

@@ -94,12 +94,15 @@ const Navbar = () => {
              <button
                   onClick={() => setLocale(locale === "uk" ? "en" : "uk")}
                   className="text-gray-400 hover:text-white text-xs font-black uppercase tracking-widest"
+                  aria-label={locale === "uk" ? "Switch to English" : "Змінити мову на українську"}
                 >
                   {locale === "uk" ? "EN" : "UA"}
                 </button>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-400 hover:text-white focus:outline-none"
+              aria-label="Toggle menu"
+              aria-expanded={isOpen}
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -537,6 +540,7 @@ export default function Home() {
             exit={{ opacity: 0, scale: 0.5, y: 20 }}
             onClick={scrollToTop}
             className="fixed bottom-10 right-10 z-50 p-4 bg-yellow-500 text-black rounded-full shadow-2xl hover:bg-yellow-400 transition-colors"
+            aria-label={locale === "uk" ? "Повернутись вгору" : "Scroll to top"}
           >
             <ChevronUp size={24} strokeWidth={3} />
           </motion.button>

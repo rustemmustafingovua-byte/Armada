@@ -1,18 +1,19 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink, ShieldCheck, Zap } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, ExternalLink, ShieldCheck, Zap, Search, Filter } from "lucide-react";
 import Link from "next/link";
 import { useLocale } from "@/components/Providers";
 
 const MemberCard = ({ name, type, delay }: { name: string, type: string, delay: number }) => (
   <motion.div
+    layout
     initial={{ opacity: 0, scale: 0.95 }}
-    whileInView={{ opacity: 1, scale: 1 }}
-    viewport={{ once: true }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.95 }}
     transition={{ duration: 0.4, delay }}
-    className="bg-white/5 border border-white/10 p-8 rounded-3xl hover:border-yellow-500/50 transition-all group flex flex-col justify-between"
+    className="bg-white/5 border border-white/10 p-8 rounded-3xl hover:border-yellow-500/50 transition-all group flex flex-col justify-between h-full"
   >
     <div>
         <div className="flex justify-between items-start mb-6">
@@ -34,6 +35,8 @@ const MemberCard = ({ name, type, delay }: { name: string, type: string, delay: 
 
 export default function MembersPage() {
   const { locale } = useLocale();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
 
   const members = [
     { name: "DeViro", type: "Unmanned Systems" },
@@ -49,6 +52,16 @@ export default function MembersPage() {
     { name: "Drone Security", type: "Counter-UAS" },
     { name: "Viyriy", type: "Long-range Systems" }
   ];
+
+  const filters = ["All", "Unmanned Systems", "Defense Solutions", "FPV Solutions", "Tactical Systems", "Defense Software"];
+
+  const filteredMembers = useMemo(() => {
+    return members.filter(member => {
+      const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesFilter = activeFilter === "All" || member.type === activeFilter;
+      return matchesSearch && matchesFilter;
+    });
+  }, [searchQuery, activeFilter, members]);
 
   return (
     <main className="bg-[#050505] min-h-screen py-32 px-4">
@@ -74,15 +87,49 @@ export default function MembersPage() {
           </motion.div>
         </div>
 
+        {/* Search & Filter Bar */}
+        <div className="mb-16 flex flex-col md:flex-row gap-6 items-center justify-between">
+            <div className="relative w-full md:w-96">
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+                <input
+                    type="text"
+                    placeholder={locale === "uk" ? "Пошук учасника..." : "Search member..."}
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-16 pr-6 text-white outline-none focus:border-yellow-500 transition-all"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+            </div>
+
+            <div className="flex gap-2 overflow-x-auto pb-4 md:pb-0 w-full md:w-auto scrollbar-hide">
+                {filters.map((filter) => (
+                    <button
+                        key={filter}
+                        onClick={() => setActiveFilter(filter)}
+                        className={`px-6 py-3 rounded-xl text-sm font-bold whitespace-nowrap transition-all border ${activeFilter === filter ? "bg-yellow-500 border-yellow-500 text-black" : "bg-white/5 border-white/10 text-gray-400 hover:border-white/20"}`}
+                    >
+                        {filter}
+                    </button>
+                ))}
+            </div>
+        </div>
+
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {members.map((member, idx) => (
-            <MemberCard key={idx} {...member} delay={idx * 0.05} />
-          ))}
+          <AnimatePresence mode="popLayout">
+            {filteredMembers.map((member, idx) => (
+                <MemberCard key={member.name} {...member} delay={idx * 0.05} />
+            ))}
+          </AnimatePresence>
+
+          {filteredMembers.length === 0 && (
+              <div className="col-span-full py-20 text-center">
+                  <p className="text-gray-500 text-xl italic">Нічого не знайдено за вашим запитом.</p>
+              </div>
+          )}
 
           <motion.div
+             layout
              initial={{ opacity: 0, scale: 0.95 }}
-             whileInView={{ opacity: 1, scale: 1 }}
-             viewport={{ once: true }}
+             animate={{ opacity: 1, scale: 1 }}
              className="bg-yellow-500 p-8 rounded-3xl flex flex-col justify-center items-center text-center cursor-pointer hover:bg-yellow-400 transition-colors group"
           >
             <Zap size={48} className="text-black mb-6 group-hover:scale-110 transition-transform" />
