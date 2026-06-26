@@ -25,7 +25,8 @@ import {
   ChevronUp
 } from "lucide-react";
 import { translations, Locale } from "@/lib/i18n/translations";
-import { useLocale } from "./layout";
+import { useLocale } from "@/components/Providers";
+import { ContactForm } from "@/components/ContactForm";
 
 // --- Components ---
 
@@ -340,7 +341,7 @@ const Activities = ({ locale }: { locale: Locale }) => {
 const News = ({ locale }: { locale: Locale }) => {
   const ukArticles = [
     { date: "03 Червня, 2026", title: "Презентація проєкту «КРИТИЧНО ЗАХИЩЕНО» у Києві", excerpt: "Створення практичних механізмів захисту об’єктів критичної інфраструктури від повітряних загроз.", tag: "Проєкти" },
-    { date: "28 Травня, 2026", title: "Україна формує нову архітектуру захисту інфраструктури", excerpt: "У Києві відбувся форум Security 2.0, присвячений захисту критичної інфраструктури.", tag: "Форуми" },
+    { date: "28 Травня, 2026", title: "Україна формує нову архітектуру захисту інфраструктури", excerpt: "У Києві відбувся forum Security 2.0, присвячений захисту критичної інфраструктури.", tag: "Форуми" },
     { date: "15 Травня, 2026", title: "АРМАДА та Global Drone Academy стали партнерами", excerpt: "Спільне напрацювання методики навчання на ті чи інші безпілотні системи.", tag: "Партнерство" }
   ];
 
@@ -400,33 +401,49 @@ const News = ({ locale }: { locale: Locale }) => {
 const Contacts = ({ locale }: { locale: Locale }) => (
     <section id="contacts" className="py-24 bg-[#080808] border-t border-white/5">
         <div className="container mx-auto px-4">
-            <div className="bg-yellow-500 rounded-[3rem] p-12 md:p-20 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-black/5 rounded-full -mr-20 -mt-20 blur-3xl" />
-
-                <div className="relative z-10 max-w-xl">
-                    <h2 className="text-4xl md:text-6xl font-black text-black mb-6 leading-tight">
-                        {locale === "uk" ? "Готові зміцнити обороноздатність?" : "Ready to strengthen defense?"}
+            <div className="grid lg:grid-cols-[1.5fr_1fr] gap-16 items-center">
+                <div>
+                    <h2 className="text-5xl md:text-7xl font-black text-white mb-8 leading-tight">
+                        {locale === "uk" ? "Готові до діалогу?" : "Ready to Talk?"}
                     </h2>
-                    <p className="text-black/70 text-lg md:text-xl font-medium mb-10">
+                    <p className="text-gray-400 text-xl font-light mb-12 leading-relaxed">
                         {locale === "uk"
-                            ? "Приєднуйтесь до найбільшої асоціації виробників безпілотних систем України вже сьогодні."
-                            : "Join Ukraine's largest association of unmanned systems manufacturers today."
+                            ? "Залиште заявку, і ми допоможемо вам стати частиною української оборонної інноваційної екосистеми."
+                            : "Submit a request, and we will help you become part of the Ukrainian defense innovation ecosystem."
                         }
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-6">
-                        <a href="mailto:office@armada.net.ua" className="flex items-center gap-3 text-black font-black text-xl hover:opacity-70 transition-opacity">
-                            <Mail size={24} /> office@armada.net.ua
-                        </a>
-                        <a href="tel:+380960360000" className="flex items-center gap-3 text-black font-black text-xl hover:opacity-70 transition-opacity">
-                            <Phone size={24} /> +38 096 036 0000
-                        </a>
+
+                    <div className="space-y-8">
+                        <div className="flex items-center gap-6">
+                            <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+                                <Mail className="text-yellow-500" size={28} />
+                            </div>
+                            <div>
+                                <p className="text-gray-500 text-xs font-black uppercase tracking-widest mb-1">Email</p>
+                                <a href="mailto:office@armada.net.ua" className="text-white text-xl font-bold hover:text-yellow-500 transition-colors">
+                                    office@armada.net.ua
+                                </a>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-6">
+                            <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10">
+                                <Phone className="text-yellow-500" size={28} />
+                            </div>
+                            <div>
+                                <p className="text-gray-500 text-xs font-black uppercase tracking-widest mb-1">Phone</p>
+                                <a href="tel:+380960360000" className="text-white text-xl font-bold hover:text-yellow-500 transition-colors">
+                                    +38 096 036 0000
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div className="relative z-10">
-                    <button className="bg-black text-yellow-500 px-12 py-6 rounded-full text-2xl font-black hover:bg-black/90 transition-all shadow-2xl transform hover:-translate-y-1">
-                        {locale === "uk" ? "Заповнити анкету" : "Apply Now"}
-                    </button>
+                <div className="relative">
+                    <div className="absolute -inset-10 bg-yellow-500/5 blur-[100px] rounded-full" />
+                    <div className="relative bg-white/[0.02] border border-white/10 p-8 md:p-12 rounded-[3rem] backdrop-blur-sm">
+                        <ContactForm />
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
-import { Locale } from "@/lib/i18n/translations";
+import { useLocale } from "@/components/Providers";
 
 const MemberCard = ({ name, type, delay }: { name: string, type: string, delay: number }) => (
   <motion.div
@@ -33,7 +33,7 @@ const MemberCard = ({ name, type, delay }: { name: string, type: string, delay: 
 );
 
 export default function MembersPage() {
-  const [locale] = useState<Locale>("uk");
+  const { locale } = useLocale();
 
   const members = [
     { name: "DeViro", type: "Unmanned Systems" },
@@ -86,8 +86,12 @@ export default function MembersPage() {
              className="bg-yellow-500 p-8 rounded-3xl flex flex-col justify-center items-center text-center cursor-pointer hover:bg-yellow-400 transition-colors group"
           >
             <Zap size={48} className="text-black mb-6 group-hover:scale-110 transition-transform" />
-            <h3 className="text-2xl font-black text-black mb-2">Стати частиною АРМАДИ</h3>
-            <p className="text-black/70 text-sm font-bold">Приєднайтесь до спільноти виробників</p>
+            <h3 className="text-2xl font-black text-black mb-2">
+                {locale === "uk" ? "Стати частиною АРМАДИ" : "Join ARMADA"}
+            </h3>
+            <p className="text-black/70 text-sm font-bold">
+                {locale === "uk" ? "Приєднайтесь до спільноти виробників" : "Join the manufacturer community"}
+            </p>
           </motion.div>
         </div>
       </div>

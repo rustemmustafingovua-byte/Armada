@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import {
   Truck,
@@ -13,29 +13,33 @@ import {
   LucideIcon
 } from "lucide-react";
 import Link from "next/link";
-import { Locale } from "@/lib/i18n/translations";
+import { useLocale } from "@/components/Providers";
 
-const ServiceCard = ({ icon: Icon, title, description, delay }: { icon: LucideIcon, title: string, description: string, delay: number }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5, delay }}
-    className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group"
-  >
-    <div className="w-20 h-20 bg-yellow-500/10 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-yellow-500 group-hover:text-black transition-all">
-      <Icon size={40} className="text-yellow-500 group-hover:text-black transition-all" />
-    </div>
-    <h3 className="text-2xl font-black text-white mb-4">{title}</h3>
-    <p className="text-gray-400 font-light leading-relaxed text-lg">{description}</p>
-  </motion.div>
-);
+const ServiceCard = ({ icon: Icon, title, description, delay, href }: { icon: LucideIcon, title: string, description: string, delay: number, href?: string }) => {
+  const content = (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay }}
+      className="bg-white/5 border border-white/10 p-10 rounded-[2.5rem] hover:bg-white/10 transition-all group h-full"
+    >
+      <div className="w-20 h-20 bg-yellow-500/10 rounded-3xl flex items-center justify-center mb-8 group-hover:bg-yellow-500 group-hover:text-black transition-all">
+        <Icon size={40} className="text-yellow-500 group-hover:text-black transition-all" />
+      </div>
+      <h3 className="text-2xl font-black text-white mb-4">{title}</h3>
+      <p className="text-gray-400 font-light leading-relaxed text-lg">{description}</p>
+    </motion.div>
+  );
+
+  return href ? <Link href={href} className="block h-full">{content}</Link> : content;
+};
 
 export default function ServicesPage() {
-  const [locale] = useState<Locale>("uk");
+  const { locale } = useLocale();
 
   const ukServices = [
-    { icon: HardHat, title: "Хаб інженерів", description: "Унікальна програма обміну досвідом та спільного залучення фахівців для вирішення складних інженерних задач." },
+    { icon: HardHat, title: "Хаб інженерів", description: "Унікальна програма обміну досвідом та спільного залучення фахівців для вирішення складних інженерних задач.", href: "/hub" },
     { icon: Truck, title: "Логістика комплектуючих", description: "Оптимізація ланцюгів постачання, спільні закупівлі та перевірені постачальники з усього світу." },
     { icon: BookOpen, title: "Навчання операторів", description: "Професійна підготовка операторів безпілотних систем за стандартами НАТО та на основі бойового досвіду." },
     { icon: FlaskConical, title: "Тестування та полігони", description: "Надання доступу до випробувальних майданчиків для перевірки систем у реальних та наближених до бойових умовах." },
@@ -44,7 +48,7 @@ export default function ServicesPage() {
   ];
 
   const enServices = [
-    { icon: HardHat, title: "Engineers' Hub", description: "Unique experience exchange program and joint involvement of specialists for complex engineering tasks." },
+    { icon: HardHat, title: "Engineers' Hub", description: "Unique experience exchange program and joint involvement of specialists for complex engineering tasks.", href: "/hub" },
     { icon: Truck, title: "Components Logistics", description: "Supply chain optimization, joint procurement, and verified global suppliers." },
     { icon: BookOpen, title: "Operator Training", description: "Professional UAS operator training according to NATO standards and based on combat experience." },
     { icon: FlaskConical, title: "Testing & Polygons", description: "Providing access to testing sites for evaluating systems in real and simulated combat conditions." },

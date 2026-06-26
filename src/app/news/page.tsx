@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Tag, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { Locale } from "@/lib/i18n/translations";
+import { useLocale } from "@/components/Providers";
 
-const NewsItem = ({ title, excerpt, date, tag, delay }: { title: string, excerpt: string, date: string, tag: string, delay: number }) => (
+const NewsItem = ({ title, excerpt, date, tag, delay, locale }: { title: string, excerpt: string, date: string, tag: string, delay: number, locale: string }) => (
     <motion.div
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -29,19 +29,19 @@ const NewsItem = ({ title, excerpt, date, tag, delay }: { title: string, excerpt
                 {excerpt}
             </p>
             <button className="flex items-center gap-2 text-white font-bold hover:gap-3 transition-all">
-                Читати далі <ArrowRight size={20} className="text-yellow-500" />
+                {locale === "uk" ? "Читати далі" : "Read More"} <ArrowRight size={20} className="text-yellow-500" />
             </button>
         </div>
     </motion.div>
 );
 
 export default function NewsPage() {
-  const [locale] = useState<Locale>("uk");
+  const { locale } = useLocale();
 
-  const news = [
+  const ukNews = [
     {
         title: "Презентація проєкту «КРИТИЧНО ЗАХИЩЕНО» у Києві",
-        excerpt: "3 червня у Києві Асоціація виробників безпілотних систем та супутніх технологій «АРМАДА» провела презентацію проєкту «КРИТИЧНО ЗАХИЩЕНО». Він присвячений створенню практичних механізмів захисту об’єктів критичної інфраструктури, підприємств і виробництв від повітряних загроз.",
+        excerpt: "3 червня у Києві Асоціація виробників безпілотних систем та супутніх технологій «АРМАДА» провела презентацію проєкту «КРИТИЧНО ЗАХИЩЕНО». Він присвячений створенню практичних механізмів захисту об’єктів критичної інфраструктури від повітряних загроз.",
         date: "03 Червня, 2026",
         tag: "Проєкти"
     },
@@ -65,6 +65,35 @@ export default function NewsPage() {
     }
   ];
 
+  const enNews = [
+    {
+        title: "'CRITICALLY PROTECTED' project presentation in Kyiv",
+        excerpt: "On June 3, the ARMADA Association held a presentation of the 'CRITICALLY PROTECTED' project in Kyiv. It is dedicated to creating practical protection mechanisms.",
+        date: "June 03, 2026",
+        tag: "Projects"
+    },
+    {
+        title: "Ukraine forms a new architecture for critical infrastructure protection",
+        excerpt: "The Security 2.0 forum was held in Kyiv, dedicated to the protection of critical infrastructure.",
+        date: "May 28, 2026",
+        tag: "Forums"
+    },
+    {
+        title: "ARMADA Association and Global Drone Academy become partners",
+        excerpt: "The agreement provides for the joint development of training methods for various unmanned systems.",
+        date: "May 15, 2026",
+        tag: "Partnership"
+    },
+    {
+        title: "What does ARMADA offer to manufacturers of unmanned systems?",
+        excerpt: "If you are a manufacturer or developer of products related to the use of unmanned systems, ARMADA will help involve specialists.",
+        date: "May 10, 2026",
+        tag: "Support"
+    }
+  ];
+
+  const news = locale === "uk" ? ukNews : enNews;
+
   return (
     <main className="bg-[#050505] min-h-screen py-32 px-4">
       <div className="container mx-auto">
@@ -80,7 +109,7 @@ export default function NewsPage() {
 
         <div className="flex flex-col">
             {news.map((item, idx) => (
-                <NewsItem key={idx} {...item} delay={idx * 0.1} />
+                <NewsItem key={idx} {...item} delay={idx * 0.1} locale={locale} />
             ))}
         </div>
       </div>
