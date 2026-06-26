@@ -21,13 +21,16 @@ import {
   BookOpen,
   FlaskConical,
   FileText,
-  LucideIcon
+  LucideIcon,
+  ChevronUp
 } from "lucide-react";
 import { translations, Locale } from "@/lib/i18n/translations";
+import { useLocale } from "./layout";
 
 // --- Components ---
 
-const Navbar = ({ locale, setLocale }: { locale: Locale, setLocale: (l: Locale) => void }) => {
+const Navbar = () => {
+  const { locale, setLocale } = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const t = translations[locale].nav;
@@ -39,12 +42,12 @@ const Navbar = ({ locale, setLocale }: { locale: Locale, setLocale: (l: Locale) 
   }, []);
 
   const navLinks = [
-    { name: t.about, href: "#about" },
-    { name: t.activities, href: "#activities" },
-    { name: t.news, href: "#news" },
-    { name: t.members, href: "#members" },
-    { name: t.services, href: "#services" },
-    { name: t.contacts, href: "#contacts" },
+    { name: t.about, href: "/#about" },
+    { name: t.activities, href: "/#activities" },
+    { name: t.news, href: "/news" },
+    { name: t.members, href: "/members" },
+    { name: t.services, href: "/services" },
+    { name: t.contacts, href: "/#contacts" },
   ];
 
   return (
@@ -360,9 +363,9 @@ const News = ({ locale }: { locale: Locale }) => {
               {locale === "uk" ? "Будьте в курсі головних подій асоціації." : "Stay updated with association's key events."}
           </p>
         </div>
-        <button className="hidden md:flex items-center gap-2 text-yellow-500 font-bold hover:gap-3 transition-all">
+        <a href="/news" className="hidden md:flex items-center gap-2 text-yellow-500 font-bold hover:gap-3 transition-all">
           {locale === "uk" ? "Всі новини" : "All News"} <ArrowRight size={20} />
-        </button>
+        </a>
       </div>
       <div className="container mx-auto px-4 grid md:grid-cols-3 gap-8">
         {articles.map((article, idx) => (
@@ -452,17 +455,42 @@ const Footer = ({ locale }: { locale: Locale }) => (
 );
 
 export default function Home() {
-  const [locale, setLocale] = useState<Locale>("uk");
+  const { locale } = useLocale();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setShowScrollTop(window.scrollY > 500);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <main className="bg-[#050505] min-h-screen selection:bg-yellow-500 selection:text-black">
-      <Navbar locale={locale} setLocale={setLocale} />
+    <main className="bg-[#050505] min-h-screen selection:bg-yellow-500 selection:text-black relative">
+      <Navbar />
       <Hero locale={locale} />
       <About locale={locale} />
       <Activities locale={locale} />
       <News locale={locale} />
       <Contacts locale={locale} />
       <Footer locale={locale} />
+
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.5, y: 20 }}
+            onClick={scrollToTop}
+            className="fixed bottom-10 right-10 z-50 p-4 bg-yellow-500 text-black rounded-full shadow-2xl hover:bg-yellow-400 transition-colors"
+          >
+            <ChevronUp size={24} strokeWidth={3} />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

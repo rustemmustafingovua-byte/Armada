@@ -1,6 +1,9 @@
-import type { Metadata } from "next";
+"use client";
+
+import React, { useState, createContext, useContext } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Locale } from "@/lib/i18n/translations";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,24 +15,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin", "cyrillic"],
 });
 
-export const metadata: Metadata = {
-  title: "АРМАДА — Асоціація виробників безпілотних систем",
-  description: "Об’єднання українських компаній, що створюють провідні безпілотні системи та рішення для них.",
-};
+// Create a context to share locale between layout and pages
+export const LocaleContext = createContext<{
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+}>({
+  locale: "uk",
+  setLocale: () => {},
+});
+
+export const useLocale = () => useContext(LocaleContext);
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [locale, setLocale] = useState<Locale>("uk");
+
   return (
-    <html
-      lang="uk"
-      className={`${geistSans.variable} ${geistMono.variable} scroll-smooth`}
-    >
-      <body className="bg-background text-foreground antialiased selection:bg-yellow-500/30">
-        {children}
-      </body>
-    </html>
+    <LocaleContext.Provider value={{ locale, setLocale }}>
+      <html
+        lang={locale}
+        className={`${geistSans.variable} ${geistMono.variable} scroll-smooth`}
+      >
+        <body className="bg-background text-foreground antialiased selection:bg-yellow-500/30">
+          {children}
+        </body>
+      </html>
+    </LocaleContext.Provider>
   );
 }
